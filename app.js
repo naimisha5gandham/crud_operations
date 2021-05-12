@@ -2,12 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
+const app = express();
+const pug = require('pug');
+const home = require("./routes/home");
 
 
-
-const app = express()
 const port = process.env.PORT || 5000
 
+
+
+
+app.set("views", "./views");
+app.set("view engine", "pug");
+
+
+app.use("/", home);
 
 app.use(bodyParser.urlencoded({extended: false}))
 
@@ -24,7 +33,7 @@ const pool = mysql.createPool({
 
 
 
-app.get('', (req,res)=> {
+app.get('/data', (req,res)=> {
 
 pool.getConnection((err,connection)=> {
   if(err) throw err
@@ -81,7 +90,7 @@ app.get('/:id', (req,res)=> {
         
         })
      
-        app.post('', (req,res)=> {
+        app.post('/register', (req,res)=> {
 
             pool.getConnection((err,connection)=> {
               if(err) throw err
@@ -106,7 +115,7 @@ app.get('/:id', (req,res)=> {
             })
            
 
-            app.put('', (req,res)=> {
+            app.put('/update', (req,res)=> {
 
                 pool.getConnection((err,connection)=> {
                   if(err) throw err
@@ -132,3 +141,4 @@ app.get('/:id', (req,res)=> {
                 })
 
 app.listen(port, ()=> console.log(`Listen on port ${port}`))
+
